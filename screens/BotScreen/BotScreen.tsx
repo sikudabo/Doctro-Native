@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Dimensions, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
-import { Avatar, Button, IconButton, TextInput } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Dimensions, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Avatar, Button, IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const DoctroLogo = require('../../assets/app-media/icon.png');
 
-const { height } = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 
 
 export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any }) {
-
+    const [question, setQuestion] = useState('');
     const [showSoftInputFocus, setShowSoftInputFocus] = useState(true);
+
+    function handleQuestionChange(updatedQuestion: string) {
+        setQuestion(updatedQuestion);
+    }
 
     return (
         <View onLayout={onLayoutRootView} style={styles.screenContainer}>
@@ -27,16 +32,44 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                 </ScrollView>
             </SafeAreaView>
             <View style={styles.bottomBar}>
-                <TextInput 
-                    activeOutlineColor="#ffffff"
-                    left={<TextInput.Icon icon="microphone" onPress={() => setShowSoftInputFocus(false)} size={35} />}
-                    mode="outlined"
-                    numberOfLines={1}
-                    onTouchStart={() => setShowSoftInputFocus(true)}
-                    placeholder="Question?"
-                    showSoftInputOnFocus={showSoftInputFocus}
-                    style={{ flex: 1, flexWrap: 'nowrap', width: '100%', }}
-                />
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    height: 50,
+            }}>
+                <View
+                    style={{
+                    backgroundColor: 'white',
+                    width: width - 60,
+                    borderRadius: 25,
+                    elevation: 2,
+                }}>
+                    <TextInput
+                        value={question}
+                        onChangeText={handleQuestionChange}
+                        style={{ height: '100%', fontSize: 14, paddingLeft: 20 }}
+                        placeholder="Question?"
+                    />
+                </View>
+                <TouchableOpacity
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: 45,
+                        height: 45,
+                        backgroundColor: '#002244',
+                        borderRadius: 24,
+                        elevation: 2,
+                    }}
+                >
+                    {question.trim() ? (
+                    <Ionicons size={25} name="md-send-sharp" color="white" />
+                    ) : (
+                    <Icon size={25} name="mic" color="white" />
+                    )}
+                </TouchableOpacity>
+            </View>
             </View>
         </View>
     );
@@ -60,7 +93,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flex: 1,
         flexDirection: 'row',
-        height: 150,
+        height: 100,
         left: 0,
         lineHeight: 'normal',
         paddingBottom: 10,
