@@ -4,8 +4,9 @@ import { Avatar, Button, IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 const DoctroLogo = require('../../assets/app-media/icon.png');
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-const { height, width } = Dimensions.get('screen');
+const { height, width } = Dimensions.get('window');
 
 
 export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any }) {
@@ -32,44 +33,50 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                 </ScrollView>
             </SafeAreaView>
             <View style={styles.bottomBar}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 50,
-            }}>
+            <KeyboardAvoidingView
+                behavior="position"
+                keyboardVerticalOffset={height - 100}
+                style={{ flex: 1 }}
+            >
                 <View
                     style={{
-                    backgroundColor: 'white',
-                    width: width - 60,
-                    borderRadius: 25,
-                    elevation: 2,
-                }}>
-                    <TextInput
-                        value={question}
-                        onChangeText={handleQuestionChange}
-                        style={{ height: '100%', fontSize: 14, paddingLeft: 20 }}
-                        placeholder="Question?"
-                    />
-                </View>
-                <TouchableOpacity
-                    style={{
-                        justifyContent: 'center',
+                        flexDirection: 'row',
                         alignItems: 'center',
-                        width: 45,
-                        height: 45,
-                        backgroundColor: '#002244',
-                        borderRadius: 24,
+                        height: 50,
+                }}>
+                    <View
+                        style={{
+                        backgroundColor: 'white',
+                        width: width - 60,
+                        borderRadius: 25,
                         elevation: 2,
-                    }}
-                >
-                    {question.trim() ? (
-                    <Ionicons size={25} name="md-send-sharp" color="white" />
-                    ) : (
-                    <Icon size={25} name="mic" color="white" />
-                    )}
-                </TouchableOpacity>
-            </View>
+                    }}>
+                        <TextInput
+                            value={question}
+                            onChangeText={handleQuestionChange}
+                            style={{ height: '100%', fontSize: 14, paddingLeft: 20 }}
+                            placeholder="Question?"
+                        />
+                    </View>
+                    <TouchableOpacity
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: 45,
+                            height: 45,
+                            backgroundColor: '#002244',
+                            borderRadius: 24,
+                            elevation: 2,
+                        }}
+                    >
+                        {question.trim() ? (
+                        <Ionicons size={25} name="md-send-sharp" color="white" />
+                        ) : (
+                        <Icon size={25} name="mic" color="white" />
+                        )}
+                    </TouchableOpacity>
+                    </View>
+                </KeyboardAvoidingView>
             </View>
         </View>
     );
