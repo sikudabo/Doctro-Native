@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Dimensions, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Avatar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
+import { Avatar } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import * as Speech from 'expo-speech';
 const DoctroLogo = require('../../assets/app-media/icon.png');
 
 const { height, width } = Dimensions.get('window');
