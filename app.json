@@ -6,10 +6,10 @@
     "orientation": "portrait",
     "plugins": [
       [
-        "@react-native-voice/voice",
+        "expo-stt",
         {
-          "microphonePermission": "Allow Doctro to access your microphone",
-          "speechRecogntionPermission": "Allow Doctro to securely recognize user speech"
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access your speech recognition"
         }
       ]
     ],

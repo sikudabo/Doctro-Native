@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import Voice from '@react-native-voice/voice';
 import Icon from 'react-native-vector-icons/Feather';
 import { Avatar } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,9 +12,62 @@ const { height, width } = Dimensions.get('window');
 export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any }) {
     const [question, setQuestion] = useState('');
     const [showSoftInputFocus, setShowSoftInputFocus] = useState(true);
+    const [voice, setVoice] = useState('');
+
+    useEffect(() => {
+        async function getVoices() {
+            const voices = await Speech.getAvailableVoicesAsync();
+            console.log('The voices are:', voices[21]);
+            console.log('What is up doc?');
+            // console.log('The voices are:', voices);
+            setVoice(voices[21].identifier);
+            /* Speech.speak('Hello, world!', {
+                _voiceIndex: 20,
+            }); */
+        }
+
+        getVoices();
+    }, []);
+    
 
     function handleQuestionChange(updatedQuestion: string) {
         setQuestion(updatedQuestion);
+    }
+
+    function handleSpeechStart() {
+    
+    }
+
+    function speechComplete() {
+        console.log('Speech is done');
+    }
+
+    function speechError() {
+        console.log('Speech error');
+    }
+
+    function speechStart() {
+        console.log('Speech started');
+    }
+
+    function speechStop() {
+        console.log('Speech stopped');
+    }
+
+    function handleAskQuestion() {
+        console.log('This is being hit!');
+        const thingToSay = 'Covid-19 began in 2019';
+        Speech.speak(question, {
+            voice,
+        });
+        /* Speech.speak(thingToSay, {
+            voice,
+            language: 'en',
+            onStart: speechStart,
+            onDone: speechComplete,
+            onStopped: speechComplete,
+            onError: speechError,
+        }); */
     }
 
     return (
@@ -70,10 +122,10 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                                 elevation: 2,
                             }}
                         >
-                            {question.trim() ? (
-                            <Ionicons size={25} name="md-send-sharp" color="white" />
+                            {question.trim() !== 'jack' ? (
+                            <Ionicons size={25} name="md-send-sharp" color="white" onPress={handleAskQuestion}  />
                             ) : (
-                            <Icon size={25} name="mic" color="white" />
+                            <Icon size={25} name="mic" color="white" onPress={handleSpeechStart} />
                             )}
                         </TouchableOpacity>
                     </View>
