@@ -114,25 +114,27 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                                 placeholder="Question?"
                             />
                         </View>
-                        <TouchableOpacity
-                            style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: 45,
-                                height: 45,
-                                backgroundColor: '#002244',
-                                borderRadius: 24,
-                                elevation: 2,
-                                paddingRight: 10,
-                                paddingLeft: 5
-                            }}
-                        >
-                            {question.trim() !== 'jack' ? (
-                            <Ionicons size={25} name="send" color="white" onPress={handleAskQuestion} style={{ textAlign: 'center' }}  />
-                            ) : (
-                            <Icon size={25} name="mic" color="white" onPress={handleSpeechStart} />
-                            )}
-                        </TouchableOpacity>
+                        <View style={{ marginRight: 10 }}>
+                            <TouchableOpacity
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: 45,
+                                    height: 45,
+                                    backgroundColor: '#002244',
+                                    borderRadius: 40,
+                                    elevation: 2,
+                                    paddingRight: 5,
+                                    paddingLeft: 5
+                                }}
+                            >
+                                {question.trim() !== 'jack' ? (
+                                <Ionicons size={25} name="send" color="white" onPress={handleAskQuestion} style={{ textAlign: 'center' }}  />
+                                ) : (
+                                <Icon size={25} name="mic" color="white" onPress={handleSpeechStart} />
+                                )}
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </KeyboardAvoidingView>
             </View>
