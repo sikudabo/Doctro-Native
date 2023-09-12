@@ -1,6 +1,7 @@
 # Doctro-Native
 
-![doctro-splash](https://github.com/sikudabo/Doctro-Native/assets/32518831/8f73eaf7-73ff-4cba-839d-e825ecf1509b)
+![icon](https://github.com/sikudabo/Doctro-Native/assets/32518831/7eabd42c-d1f6-440c-98d0-491649f2be27)
+
 
 
 This is the offical native client application for Doctro
