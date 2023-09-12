@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { MD3DarkTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import { useFonts, VarelaRound_400Regular } from '@expo-google-fonts/varela-round';
 import * as SplashScreen from 'expo-splash-screen';
+import BotScreen from './screens/BotScreen/BotScreen';
 
 const theme = {
   ...DefaultTheme,
@@ -34,10 +35,7 @@ function App_DisplayLayer({ fontsLoaded }: AppDisplayLayerProps) {
 
   return (
     <PaperProvider theme={theme}>
-      <View style={styles.container}>
-        <Text style={styles.text}>Doctro</Text>
-        <StatusBar style="auto" />
-      </View>
+        <BotScreen onLayoutRootView={onLayoutRootView} />
     </PaperProvider>
   );
 }
@@ -56,8 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   text: {
     fontFamily: 'VarelaRound_400Regular',
