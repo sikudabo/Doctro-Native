@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Dimensions, Keyboard, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { Avatar } from 'react-native-paper';
+import { Avatar, IconButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Speech from 'expo-speech';
 const DoctroLogo = require('../../assets/app-media/icon.png');
@@ -17,10 +17,10 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
     useEffect(() => {
         async function getVoices() {
             const voices = await Speech.getAvailableVoicesAsync();
-            console.log('The voices are:', voices[21]);
+            console.log('The voices are:', voices[0]);
             console.log('What is up doc?');
             // console.log('The voices are:', voices);
-            setVoice(voices[21].identifier);
+            setVoice(voices[22].identifier);
             /* Speech.speak('Hello, world!', {
                 _voiceIndex: 20,
             }); */
@@ -55,6 +55,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
     }
 
     function handleAskQuestion() {
+        Keyboard.dismiss();
         console.log('This is being hit!');
         const thingToSay = 'Covid-19 began in 2019';
         Speech.speak(question, {
@@ -96,6 +97,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                             flexDirection: 'row',
                             alignItems: 'center',
                             height: 50,
+                            paddingRight: 30,
                     }}>
                         <View
                             style={{
@@ -103,6 +105,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                             width: width - 60,
                             borderRadius: 25,
                             elevation: 2,
+                            paddingRight: 20,
                         }}>
                             <TextInput
                                 value={question}
@@ -120,10 +123,12 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                                 backgroundColor: '#002244',
                                 borderRadius: 24,
                                 elevation: 2,
+                                paddingRight: 10,
+                                paddingLeft: 5
                             }}
                         >
                             {question.trim() !== 'jack' ? (
-                            <Ionicons size={25} name="md-send-sharp" color="white" onPress={handleAskQuestion}  />
+                            <Ionicons size={25} name="send" color="white" onPress={handleAskQuestion} style={{ textAlign: 'center' }}  />
                             ) : (
                             <Icon size={25} name="mic" color="white" onPress={handleSpeechStart} />
                             )}
