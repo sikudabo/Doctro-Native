@@ -1,6 +1,9 @@
+import React, { useCallback, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { MD3DarkTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import { useFonts, VarelaRound_400Regular } from '@expo-google-fonts/varela-round';
+import * as SplashScreen from 'expo-splash-screen';
 
 const theme = {
   ...DefaultTheme,
@@ -8,15 +11,45 @@ const theme = {
   rippleEffectEnabled: true,
 };
 
+type AppDisplayLayerProps = {
+  fontsLoaded: boolean;
+};
+
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
+  return <App_DisplayLayer {...useDataLayer()} />;
+}
+
+function App_DisplayLayer({ fontsLoaded }: AppDisplayLayerProps) {
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <PaperProvider theme={theme}>
       <View style={styles.container}>
-        <Text>Doctro</Text>
+        <Text style={styles.text}>Doctro</Text>
         <StatusBar style="auto" />
       </View>
     </PaperProvider>
   );
+}
+
+function useDataLayer() {
+  const [fontsLoaded] = useFonts({
+    VarelaRound_400Regular,
+  });
+
+  return {
+    fontsLoaded,
+  };
 }
 
 const styles = StyleSheet.create({
@@ -25,5 +58,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    fontFamily: 'VarelaRound_400Regular',
   },
 });
