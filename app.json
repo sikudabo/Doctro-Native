@@ -1,9 +1,18 @@
 {
   "expo": {
-    "name": "doctro-native",
-    "slug": "doctro-native",
+    "name": "doctro",
+    "slug": "doctro",
     "version": "1.0.0",
     "orientation": "portrait",
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow Doctro to access your microphone",
+          "speechRecogntionPermission": "Allow Doctro to securely recognize user speech"
+        }
+      ]
+    ],
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
