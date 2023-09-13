@@ -13,6 +13,7 @@
     "@expo/ngrok": "^2.5.0",
     "@expo/webpack-config": "^19.0.0",
     "@react-native-voice/voice": "^3.2.4",
+    "axios": "^1.5.0",
     "expo": "~49.0.10",
     "expo-speech": "^11.3.0",
     "expo-splash-screen": "^0.20.5",

@@ -58,9 +58,9 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
         Keyboard.dismiss();
         console.log('This is being hit!');
         const thingToSay = 'Covid-19 began in 2019';
-        Speech.speak(question, {
+        /* Speech.speak(question, {
             voice,
-        });
+        }); */
         /* Speech.speak(thingToSay, {
             voice,
             language: 'en',
