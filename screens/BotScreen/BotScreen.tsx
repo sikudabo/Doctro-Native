@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, Keyboard, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Feather';
-import { Avatar, IconButton } from 'react-native-paper';
+import { ActivityIndicator, Avatar, IconButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Speech from 'expo-speech';
 const DoctroLogo = require('../../assets/app-media/icon.png');
@@ -14,6 +14,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
     const [question, setQuestion] = useState('');
     const [showSoftInputFocus, setShowSoftInputFocus] = useState(true);
     const [voice, setVoice] = useState('');
+    const [answerLoading, setAnswerLoading] = useState(false);
 
     useEffect(() => {
         async function getVoices() {
@@ -57,19 +58,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
 
     async function handleAskQuestion() {
         Keyboard.dismiss();
-        console.log('This is being hit!');
-        const thingToSay = 'Covid-19 began in 2019';
-        /* Speech.speak(question, {
-            voice,
-        }); */
-        /* Speech.speak(thingToSay, {
-            voice,
-            language: 'en',
-            onStart: speechStart,
-            onDone: speechComplete,
-            onStopped: speechComplete,
-            onError: speechError,
-        }); */
+        setAnswerLoading(true);
 
         await axios({
             data: {
@@ -81,13 +70,28 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
             method: 'POST',
             url: 'http://10.162.66.177:3018/api/answer-question',
         }).then(response => {
+            setQuestion('');
+            setAnswerLoading(false);
             const { answer } = response.data;
             Speech.speak(answer, {
                 voice,
             });
         }).catch(err => {
+            setQuestion('');
+            setAnswerLoading(false);
             console.log(err.message);
         })
+    }
+
+    if (answerLoading) {
+        return (
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator
+                    animating={answerLoading}
+                    color='#002244'
+                />
+            </View>
+        );
     }
 
     return (
@@ -202,6 +206,13 @@ const styles = StyleSheet.create({
     },
     innerChatContainer: {
         paddingTop: 100,
+    },
+    loaderContainer: {
+        alignItems: 'center',
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        width: '100%',
     },
     screenContainer: {
         flex: 1,
