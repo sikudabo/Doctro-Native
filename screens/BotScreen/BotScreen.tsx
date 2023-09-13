@@ -103,6 +103,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                     {messages.map((msg, index) => (
                         <Surface 
                             elevation={5}
+                            key={index}
                             style={{ backgroundColor: msg.from === 'bot' ? '#002244' : '#B0B7BC', marginBottom: 20, width: '100%' }}
                         >
                             <Text 
