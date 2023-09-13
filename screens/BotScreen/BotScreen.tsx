@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Keyboard, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/Feather';
 import { Avatar, IconButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -54,7 +55,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
         console.log('Speech stopped');
     }
 
-    function handleAskQuestion() {
+    async function handleAskQuestion() {
         Keyboard.dismiss();
         console.log('This is being hit!');
         const thingToSay = 'Covid-19 began in 2019';
@@ -69,6 +70,24 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
             onStopped: speechComplete,
             onError: speechError,
         }); */
+
+        await axios({
+            data: {
+                question,
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'http://10.162.66.177:3018/api/answer-question',
+        }).then(response => {
+            const { answer } = response.data;
+            Speech.speak(answer, {
+                voice,
+            });
+        }).catch(err => {
+            console.log(err.message);
+        })
     }
 
     return (
