@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Feather';
-import { ActivityIndicator, Avatar, IconButton } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Surface } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Speech from 'expo-speech';
 const DoctroLogo = require('../../assets/app-media/icon.png');
@@ -15,21 +15,31 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
     const [showSoftInputFocus, setShowSoftInputFocus] = useState(true);
     const [voice, setVoice] = useState('');
     const [answerLoading, setAnswerLoading] = useState(false);
+    const viewRef = useRef();
+    const scrollViewRef = useRef<ScrollView | null>(null);
+    const [messages, setMessages] = useState([{
+        from: 'bot',
+        msg: 'Welcome to Doctro! Ask me anything about Covid-19',
+    }]);
 
     useEffect(() => {
         async function getVoices() {
             const voices = await Speech.getAvailableVoicesAsync();
-            console.log('The voices are:', voices[0]);
-            console.log('What is up doc?');
-            // console.log('The voices are:', voices);
             setVoice(voices[22].identifier);
-            /* Speech.speak('Hello, world!', {
-                _voiceIndex: 20,
-            }); */
+            console.log('The voice is:', voices[22]);
+            Speech.speak(messages[0].msg, {
+                voice: 'com.apple.voice.compact.en-GB.Daniel',
+            });
         }
-
+    
         getVoices();
     }, []);
+
+    useEffect(() => {
+        scrollViewRef?.current?.scrollToEnd();
+        console.log('The current is:', scrollViewRef?.current?.scrollToEnd());
+    }, [messages.length]);
+    
     
 
     function handleQuestionChange(updatedQuestion: string) {
@@ -40,25 +50,15 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
     
     }
 
-    function speechComplete() {
-        console.log('Speech is done');
-    }
-
-    function speechError() {
-        console.log('Speech error');
-    }
-
-    function speechStart() {
-        console.log('Speech started');
-    }
-
-    function speechStop() {
-        console.log('Speech stopped');
-    }
-
     async function handleAskQuestion() {
+
+        if (!question) {
+            return;
+        }
+
         Keyboard.dismiss();
         setAnswerLoading(true);
+        setMessages((messages) => [...messages, { from: 'user', msg: question }]);
 
         await axios({
             data: {
@@ -73,9 +73,14 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
             setQuestion('');
             setAnswerLoading(false);
             const { answer } = response.data;
+            setMessages((messages) => [...messages, { from: 'bot', msg: answer }]);
             Speech.speak(answer, {
                 voice,
             });
+            if (scrollViewRef && scrollViewRef.current) {
+                scrollViewRef?.current.scrollTo({ x: 0, animated: true });
+            }
+            console.log('The ref is:', scrollViewRef.current?.scrollToEnd());
         }).catch(err => {
             setQuestion('');
             setAnswerLoading(false);
@@ -103,11 +108,21 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                 />
             </View>
             <SafeAreaView style={styles.chatContainer}>
-                <ScrollView style={styles.innerChatContainer}>
-                    <Text>
-                        Chat Bot
-                    </Text>
+                <ScrollView ref={scrollViewRef as MutableRefObject<ScrollView>} style={styles.innerChatContainer}>
+                    {messages.map((msg, index) => (
+                        <Surface 
+                            elevation={5}
+                            style={{ backgroundColor: msg.from === 'bot' ? '#002244' : '#B0B7BC', marginBottom: 20, width: '100%' }}
+                        >
+                            <Text 
+                                style={{ color: msg.from === 'bot' ? '#ffffff' : '#000000', fontFamily: 'VarelaRound_400Regular', padding: 20 }}
+                            >
+                                {msg.msg}
+                            </Text>
+                        </Surface>
+                    ))}
                 </ScrollView>
+                <View ref={viewRef as any} />
             </SafeAreaView>
             <View style={styles.bottomBar}>
                 <KeyboardAvoidingView
@@ -186,10 +201,11 @@ const styles = StyleSheet.create({
         height: 100,
         left: 0,
         lineHeight: 'normal',
+        marginTop: 100,
         paddingBottom: 10,
         paddingLeft: 10,
         paddingRight: 10,
-        position: 'absolute',
+        position: 'relative',
         right: 0,
         width: '100%',
     },
@@ -200,12 +216,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 900,
         flex: 3,
-        paddingBottom: 40,
+        paddingBottom: 10,
         overflow: 'scroll',
         width: '100%',
     },
     innerChatContainer: {
-        paddingTop: 100,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
     },
     loaderContainer: {
         alignItems: 'center',
