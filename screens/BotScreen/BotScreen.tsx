@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Dimensions, Keyboard, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Dimensions, FlatList, Keyboard, KeyboardAvoidingView, View, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Feather';
 import { ActivityIndicator, Avatar, Surface } from 'react-native-paper';
@@ -26,7 +26,6 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
         async function getVoices() {
             const voices = await Speech.getAvailableVoicesAsync();
             setVoice(voices[22].identifier);
-            console.log('The voice is:', voices[22]);
             Speech.speak(messages[0].msg, {
                 voice: 'com.apple.voice.compact.en-GB.Daniel',
             });
@@ -34,11 +33,6 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
     
         getVoices();
     }, []);
-
-    useEffect(() => {
-        scrollViewRef?.current?.scrollToEnd();
-        console.log('The current is:', scrollViewRef?.current?.scrollToEnd());
-    }, [messages.length]);
     
     
 
@@ -77,10 +71,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
             Speech.speak(answer, {
                 voice,
             });
-            if (scrollViewRef && scrollViewRef.current) {
-                scrollViewRef?.current.scrollTo({ x: 0, animated: true });
-            }
-            console.log('The ref is:', scrollViewRef.current?.scrollToEnd());
+           
         }).catch(err => {
             setQuestion('');
             setAnswerLoading(false);
@@ -108,7 +99,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                 />
             </View>
             <SafeAreaView style={styles.chatContainer}>
-                <ScrollView ref={scrollViewRef as MutableRefObject<ScrollView>} style={styles.innerChatContainer}>
+                <ScrollView onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()} ref={scrollViewRef as MutableRefObject<ScrollView>} style={styles.innerChatContainer}>
                     {messages.map((msg, index) => (
                         <Surface 
                             elevation={5}
