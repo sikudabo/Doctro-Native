@@ -62,7 +62,7 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'http://10.162.66.177:3018/api/answer-question',
+            url: process.env.EXPO_PUBLIC_API_URL,
         }).then(response => {
             setQuestion('');
             setAnswerLoading(false);
@@ -73,7 +73,11 @@ export default function BotScreen({ onLayoutRootView }: { onLayoutRootView: any 
             });
            
         }).catch(err => {
+            Speech.speak('There was an error. Please try again!', {
+                voice,
+            });
             setQuestion('');
+            setMessages((messages) => [...messages, { from: 'bot', msg: 'There was an error. Please try again!' }]);
             setAnswerLoading(false);
             console.log(err.message);
         })
