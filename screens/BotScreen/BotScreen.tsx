@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 5,
+        with: '100%',
     },
     loaderContainer: {
         alignItems: 'center',

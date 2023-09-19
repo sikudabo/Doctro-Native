@@ -2,7 +2,7 @@
   "expo": {
     "name": "doctro",
     "slug": "doctro",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "plugins": [
       [
@@ -24,7 +24,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sikudabo.doctro"
     },
     "android": {
       "adaptiveIcon": {
